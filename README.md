@@ -14,8 +14,8 @@ All of the Lua 5.3 syntax and semantics are covered by the transpiler, except fo
 1. build an abstract syntax tree.  In this case we build a C++ abstract syntax tree using an [abstract grammar](#lua-abstract-grammar) of C++ classes.
 2. recursively invoke `transpile` member functions of the abstract syntax tree to generate Lisp.
 
-    $ lua2lisp luademo.lua
-    Saved luademo.lisp
+      $ lua2lisp luademo.lua
+      Saved luademo.lisp
 
 ![lua2lisp](lua2lisp.png)
 
