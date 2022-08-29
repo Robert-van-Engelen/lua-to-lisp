@@ -212,7 +212,7 @@ longbracket                     \[=*\[
 %%
 
 [[:space:]]+                    // skip white space
-"--" {longbracket}              { bracketlen = size(); start(LONGCOMMENT); }
+"--" {longbracket}              { bracketlen = size()-2; start(LONGCOMMENT); }
 "--".*                          // ignore inline comment
 {name}                          { return Name(); }
 {integer}                       { return IntegerLiteral(); }
