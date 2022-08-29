@@ -1,7 +1,7 @@
 Lua to Lisp transpiler
 ======================
 
-I spent a satisfying weekend writing a Lua-to-Lisp transpiler in [Bison](https://www.gnu.org/software/bison/) and [RE/flex](https://github.com/Genivia/RE-flex).  The transpiler translates Lua language constructs to Lisp.  Lua is essentially sugarred Lisp.  A [quote](http://paulgraham.com/rootsoflisp.html) by Paul Graham comes to mind *"As computers have grown more powerful, the new languages being developed have been moving steadily toward the Lisp model."*
+I spent a satisfying weekend writing a Lua-to-Lisp transpiler in [Bison](https://www.gnu.org/software/bison/) and [RE/flex](https://github.com/Genivia/RE-flex).  The transpiler translates Lua language constructs to Lisp.  Lua is essentially sugared Lisp.  A [quote](http://paulgraham.com/rootsoflisp.html) by Paul Graham comes to mind *"As computers have grown more powerful, the new languages being developed have been moving steadily toward the Lisp model."*
 
 The first step was to locate the Lua 5.3 grammar, which can be found in the [Lua 5.3 reference manual](https://www.lua.org/manual/5.3/manual.html).  There are also older [Lua grammars](http://lua-users.org/wiki/LuaGrammar) on the web.
 
@@ -14,8 +14,10 @@ All of the Lua 5.3 syntax and semantics are covered by the transpiler, except fo
 1. build an abstract syntax tree.  In this case we build a C++ abstract syntax tree using an [abstract grammar](#lua-abstract-grammar) of C++ classes.
 2. recursively invoke `transpile` member functions of the abstract syntax tree to generate Lisp.
 
-      $ lua2lisp luademo.lua
-      Saved luademo.lisp
+Execution `lua2lisp` on a Lua source code file produces a Lisp file:
+
+    $ lua2lisp luademo.lua
+    Saved luademo.lisp
 
 ![lua2lisp](lua2lisp.png)
 
