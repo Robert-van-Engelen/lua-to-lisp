@@ -294,7 +294,7 @@ class Transpiler {
     {
 #ifdef NAME_LOOKUP
       // if unassigned/undefined Lisp variables cause errors: use a Lisp lookup special form
-      fprintf(transpiler.out, "(lookup " LUA_NAME_FORMAT ")", name->c_str());
+      fprintf(transpiler.out, "(lookup '" LUA_NAME_FORMAT ")", name->c_str());
 #else
       fprintf(transpiler.out, LUA_NAME_FORMAT, name->c_str());
 #endif
@@ -579,26 +579,59 @@ class Transpiler {
     Local(NameList *v, List<Expression> *e) : namelist(v), init(e) { }
     virtual void transpile(Transpiler& transpiler)
     {
-      // TODO local x,y = f() assigns both x and y the return values of f()
-      fprintf(transpiler.out, "(let (");
-      transpiler.indent++;
-      NameList::iterator i = namelist->begin();
-      List<Expression>::iterator j = init->begin();
-      while (i != namelist->end())
+      fprintf(transpiler.out, "(let ");
+      if (namelist->size() == init->size() || init->empty())
       {
-        transpiler.newline();
-        fprintf(transpiler.out, "(" LUA_NAME_FORMAT, (*i)->c_str());
-        if (j != init->end())
+        putc('(', transpiler.out);
+        transpiler.indent++;
+        NameList::iterator i = namelist->begin();
+        List<Expression>::iterator j = init->begin();
+        while (i != namelist->end())
         {
-          putc(' ', transpiler.out);
-          (*j)->transpile(transpiler);
-          ++j;
+          transpiler.newline();
+          fprintf(transpiler.out, "(" LUA_NAME_FORMAT, (*i)->c_str());
+          if (j != init->end())
+          {
+            putc(' ', transpiler.out);
+            (*j)->transpile(transpiler);
+            ++j;
+          }
+          putc(')', transpiler.out);
+          ++i;
+        }
+        transpiler.indent--;
+        putc(')', transpiler.out);
+      }
+      else
+      {
+        int c = '(';
+        for (auto& name : *namelist)
+        {
+          fprintf(transpiler.out, "%c(" LUA_NAME_FORMAT ")", c, name->c_str());
+          c = ' ';
         }
         putc(')', transpiler.out);
-        ++i;
+        if (!init->empty())
+        {
+          transpiler.newline();
+          fprintf(transpiler.out, "(assign ");
+          c = '(';
+          for (auto& name : *namelist)
+          {
+            fprintf(transpiler.out, "%c" LUA_NAME_FORMAT, c, name->c_str());
+            c = ' ';
+          }
+          fprintf(transpiler.out, ") ");
+          c = '(';
+          for (auto& expression : *init)
+          {
+            putc(c, transpiler.out);
+            expression->transpile(transpiler);
+            c = ' ';
+          }
+          fprintf(transpiler.out, "))");
+        }
       }
-      transpiler.indent--;
-      putc(')', transpiler.out);
       transpiler.locals++;
     }
     std::unique_ptr<NameList> namelist;
