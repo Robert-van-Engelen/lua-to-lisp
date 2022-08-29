@@ -195,8 +195,9 @@ class Transpiler {
           if (field->key)
           {
             if (typeid(*field->key) == typeid(Variable))
-              fprintf(transpiler.out, "'");
-            field->key->transpile(transpiler);
+              fprintf(transpiler.out, "'%s", dynamic_cast<Variable*>(field->key.get())->name->c_str());
+            else
+              field->key->transpile(transpiler);
           }
           else
           {

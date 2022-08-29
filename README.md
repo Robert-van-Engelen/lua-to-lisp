@@ -81,9 +81,19 @@ Named tables (tables assigned to variables) are (recursively) indexed as follows
     =>
     (index <expr> <lua.name>)
 
-The Lisp `index` macro searches a table for a matching key to return the corresponding value or `nil` when not found.
+The Lisp `index` function is very similar to Lisp `assoc` in that it searches a table (a Lisp environment list) for a matching key to return the corresponding value or `nil` when not found.  A symbol `'<namek>` should match a string "namek" in the table, because Lua `name.key` and `name["key"]` are identical.  A possible implementation of `index` is:
 
-A symbol `'<namek>` should match a string "namek" in the table, because Lua `name.key` and `name["key"]` are identical.
+    (defun index (field table)
+        (when table
+            (if (or (symbolp field) (stringp field))
+                (if (string= field (car (car table)))
+                    (cdr (car table))
+                    (index field (cdr table)))
+                (if (equal field (car (car table)))
+                    (cdr (car table))
+                    (index field (cdr table))))))
+
+However, some Lisp force upper case symbols.  Hence `'a` and `"a"` are incomparable.  To avoid this, the transpiler could output `"<name>"` instead of `'<name>` to construct and search tables.
 
 ### function
 
@@ -186,7 +196,7 @@ A Lua `if` with zero of more `elseif` branches is translated to a Lisp `cond` sp
 
 ### while and until
 
-A `while` and `until` loop is translated to a Lisp `while` and `until` loop special form (or macros), respectively.
+A `while` and `until` loop is translated to a Lisp `while` and `until` loop special form (or macro), respectively.
 
 A `break` may appear anywhere in a loop to terminate the loop.
 
