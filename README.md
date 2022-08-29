@@ -9,6 +9,8 @@ The [Bison LALR grammar for Lua 5.3](#lua-5.3-grammar-for-bison-3.2-or-greater) 
 
 All of the Lua 5.3 syntax and semantics are covered by the transpiler, except for gotos and low-level stuff such as metatables and integration with C.  Perhaps I will add support for gotos later.
 
+Some implementation details in the translation to Lisp may need some further TLC.
+
 ## How to transpile Lua to Lisp
 
 The `lua2lisp` transpiler converts Lua to Lisp in two phases:
