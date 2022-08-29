@@ -1,7 +1,11 @@
+# required Bison 3.2 or greater and RE/flex https://github.com/Genivia/RE-flex
+
 CXX       = c++
 REFLEX    = reflex
 REFLAGS   =
 LIBREFLEX = -lreflex
+# if reflex is not installed:
+# LIBREFLEX = libreflex.a
 
 BISON     = bison
 
