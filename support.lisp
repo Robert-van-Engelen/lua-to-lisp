@@ -34,5 +34,14 @@
                 (cdr (car table))
                 (index field (cdr table))))))
 
+; assign (suggested)
+(defmacro assign (lhs rhs)
+    (list 'let (list (list 'evrhs (list 'mapcar (list 'quote 'eval) rhs)))
+        ; TODO traverse lhs to assign evrhs
+        'evrhs
+    )
+)
+
 ; lookup variable, return nil when undefined (suggested), lua.hpp enable macro NAME_LOOKUP
-(defmacro lookup (var) (list 'ignore-errors var))
+(defmacro lookup (var)
+    (list 'ignore-errors var))
