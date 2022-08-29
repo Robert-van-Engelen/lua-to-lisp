@@ -3,6 +3,8 @@ Lua to Lisp transpiler
 
 I spent a satisfying weekend writing a Lua-to-Lisp transpiler in [Bison](https://www.gnu.org/software/bison/) and [RE/flex](https://github.com/Genivia/RE-flex) a modern alternative to Flex for C++.  The transpiler translates Lua language constructs to Lisp.  Dare I say that Lua is essentially sugared Lisp?  A [quote](http://paulgraham.com/rootsoflisp.html) by Paul Graham comes to mind *"As computers have grown more powerful, the new languages being developed have been moving steadily toward the Lisp model."*
 
+The project only uses a two specialized `assign` and `index` special forms to satisfy Lua assignment and indexing semantics in Lisp.  The rest of the output is constructed from plain and simple Lisp with `let`, `letrec`, `block`, `return-from`, `begin` (or `progn`), `cond`, `if`, `lambda`, `define`, `list`, `cons`, and arithmetic/relational operators.
+
 The first step was to locate the Lua 5.3 grammar, which can be found in the [Lua 5.3 reference manual](https://www.lua.org/manual/5.3/manual.html).  There are also older [Lua grammars](http://lua-users.org/wiki/LuaGrammar) on the web.
 
 The [Bison LALR grammar for Lua 5.3](#lua-5.3-grammar-for-bison-3.2-or-greater) that I put together for this project comes from Lua's manual.  It has four shift-reduce conflicts that are due to Lua's well-known ambiguity.  This is not a problem at all, because Bison performs a shift by default.  This shift corresponds to Lua's rule that an open parenthesis after an expression is part of the current expression or function call, even when the open parenthesis is placed on the next line.  Semicolons are optional in Lua and can be used to enforce statement separation.
