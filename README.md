@@ -35,6 +35,7 @@ Lua constants are translated to Lisp constants:
     true => #t
     false => #f
     <integer> => <integer>
+    <float> => <float>
     <string> => <string>
 
 All values are truthy except `nil` and `false` that are falsy in Lua and in Lisp.
