@@ -521,4 +521,4 @@ The C++ abstract syntax tree is composed of the following class instances define
 | `Range`              | `AbstractSyntaxTree` | `Expression start,end,step`
 | `Field`              | `AbstractSyntaxTree` | `Expression key,value`
 
-The `Expression` and `Statement` classes and derivatives include `transpile` functions to translate Lua to Lisp.
+The `Expression` and `Statement` base classes and derivatives include `transpile` functions to translate Lua to Lisp.
