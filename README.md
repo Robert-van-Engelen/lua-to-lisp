@@ -79,7 +79,7 @@ Named tables (tables assigned to variables) are (recursively) indexed as follows
     =>
     (index <expr> <lua.name>)
 
-The Lisp `index` function searches a table for a matching key to return the corresponding value or `nil` when not found.
+The Lisp `index` macro searches a table for a matching key to return the corresponding value or `nil` when not found.
 
 A symbol `'<namek>` should match a string "namek" in the table, because Lua `name.key` and `name["key"]` are identical.
 
@@ -184,7 +184,7 @@ A Lua `if` with zero of more `elseif` branches is translated to a Lisp `cond` sp
 
 ### while and until
 
-A `while` and `until` loop is translated to a Lisp `while` and `until` loop special form, respectively.
+A `while` and `until` loop is translated to a Lisp `while` and `until` loop special form (or macros), respectively.
 
 A `break` may appear anywhere in a loop to terminate the loop.
 
@@ -247,7 +247,7 @@ If only one `<name>` is specified and only one iterator, then the generated code
 
 ### Assignment
 
-A Lua assignment is a multi-way assignment translated to Lisp `assign`:
+A Lua assignment is a multi-way assignment translated to a Lisp `assign` special form (macro) that implements Lua's assignment semantics:
 
     <var1>,<var2>,...,<vark> = <expr1>,<expr2>,...,<exprm>
     =>
