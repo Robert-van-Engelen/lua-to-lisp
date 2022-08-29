@@ -16,8 +16,8 @@
 (alias Lor or)
 (alias Land and)
 (alias Lnot not)
-(defun L== (x y) (eq x y))
-(defun L~= (x y) (not (eq x y)))
+(defun L== (x y) (if (and (stringp x) (stringp y)) (string= x y) (eq x y)))
+(defun L~= (x y) (not (L== x y)))
 (defun L< (x y) (if (and (stringp x) (stringp y)) (string< x y) (< x y)))
 (defun L> (x y) (if (and (stringp x) (stringp y)) (string> x y) (> x y)))
 (defun L<= (x y) (if (and (stringp x) (stringp y)) (string<= x y) (<= x y)))
@@ -37,7 +37,7 @@
 ; assign (suggested)
 (defmacro assign (lhs rhs)
     (list 'let (list (list 'evrhs (list 'mapcar (list 'quote 'eval) rhs)))
-        ; TODO traverse lhs to assign evrhs
+        ; TODO traverse lhs to assign evrhs list of evaluated rhs
         'evrhs
     )
 )
