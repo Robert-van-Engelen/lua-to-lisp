@@ -7,7 +7,7 @@ The project only uses two specialized `assign` and `index` special forms (macros
 
 The first step was to locate the Lua 5.3 grammar, which can be found in the [Lua 5.3 reference manual](https://www.lua.org/manual/5.3/manual.html).  There are also older [Lua grammars](http://lua-users.org/wiki/LuaGrammar) on the web.
 
-The [Bison LALR grammar for Lua 5.3](#lua-5.3-grammar-for-bison-3.2-or-greater) that I put together for this project comes from Lua's manual.  It has four shift-reduce conflicts that are due to Lua's well-known ambiguity.  This is not a problem at all, because Bison performs a shift by default.  This shift corresponds to Lua's rule that an open parenthesis after an expression is part of the current expression or function call, even when the open parenthesis is placed on the next line.  Semicolons are optional in Lua and can be used to enforce statement separation.
+The [Bison LALR grammar for Lua 5.3](#lua-53-grammar-for-bison-32-or-greater) that I put together for this project comes from Lua's manual.  It has four shift-reduce conflicts that are due to Lua's well-known ambiguity.  This is not a problem at all, because Bison performs a shift by default.  This shift corresponds to Lua's rule that an open parenthesis after an expression is part of the current expression or function call, even when the open parenthesis is placed on the next line.  Semicolons are optional in Lua and can be used to enforce statement separation.
 
 All of the Lua 5.3 syntax and semantics are covered by the transpiler, except for gotos and low-level stuff such as metatables and integration with C.  Perhaps I will add support for gotos later.
 
@@ -478,47 +478,47 @@ The Lua 5.3 grammar for Bison 3.2 with reduce/reduce conflict eliminated by expa
 
 The C++ abstract syntax tree is composed of the following class instances defined by the `Transpiler` class:
 
-| class                | inherits             |
-| -------------------- | -------------------- |
-| `Name`               |                      |
-| `NameList`           |                      |
+| class                | inherits             | contains
+| -------------------- | -------------------- | --------
+| `Name`               |                      | pointer to `std::string` in the tokenizer's symbol table
+| `NameList`           |                      | `std::list<Name>`
 | `AbstractSyntaxTree` |                      |
 | `Expression`         | `AbstractSyntaxTree` |
 | `Statement`          | `AbstractSyntaxTree` |
 | `Nil`                | `Expression`         |
 | `True`               | `Expression`         |
 | `False`              | `Expression`         |
-| `Integer`            | `Expression`         |
-| `Float`              | `Expression`         |
-| `String`             | `Expression`         |
+| `Integer`            | `Expression`         | 64 bit integer literal value
+| `Float`              | `Expression`         | 64 bit float literal value
+| `String`             | `Expression`         | string literal value
 | `Dots`               | `Expression`         |
-| `Lambda`             | `Expression`         |
-| `Table`              | `Expression`         |
-| `Call`               | `Expression`         |
-| `UnaryOp`            | `Expression`         |
-| `Op`                 | `Expression`         |
-| `Variable`           | `Expression`         |
-| `Index`              | `Expression`         |
-| `Member`             | `Expression`         |
-| `Block`              | `Statement`          |
-| `If`                 | `Statement`          |
-| `While`              | `Statement`          |
-| `Until`              | `Statement`          |
-| `ForCounter`         | `Statement`          |
-| `ForIterator`        | `Statement`          |
-| `Function`           | `Statement`          |
-| `Goto`               | `Statement`          |
-| `Label`              | `Statement`          |
-| `Assign`             | `Statement`          |
-| `FunctionCall`       | `Statement`          |
-| `Local`              | `Statement`          |
-| `LocalFunction`      | `Statement`          |
+| `Lambda`             | `Expression`         | `Parameters parameters`, `List<Statement> block`
+| `Table`              | `Expression`         | `List<Field> fields`
+| `Call`               | `Expression`         | `Expression function`, `List<Expression> arguments`, `Name colonname`
+| `UnaryOp`            | `Expression`         | `const char *op`, `Expression operand`
+| `Op`                 | `Expression`         | `const char *op`, `Expression operand1,operand2`
+| `Variable`           | `Expression`         | `Name name`
+| `Index`              | `Expression`         | `Expression var,index`
+| `Member`             | `Expression`         | `Expression var`, `Name member`
+| `Block`              | `Statement`          | `List<Statement> block`
+| `If`                 | `Statement`          | `List<Condition> conditions`
+| `While`              | `Statement`          | `Expression condition`, `List<Statement> block`
+| `Until`              | `Statement`          | `List<Statement> block`, `Expression> condition`
+| `ForCounter`         | `Statement`          | `Range range`, `List<Statement> block`
+| `ForIterator`        | `Statement`          | `NameList namelist`, `List<Expression> iterators`, `List<Statement> block`
+| `Function`           | `Statement`          | `FunctionName functionname`, `Lambda lambda`
+| `Goto`               | `Statement`          | `Name label`
+| `Label`              | `Statement`          | `Name label`
+| `Assign`             | `Statement`          | `List<Expression> lhs,rhs`
+| `FunctionCall`       | `Statement`          | `Call call`
+| `Local`              | `Statement`          | `NameList namelist`, `List<Expression> init`
+| `LocalFunction`      | `Statement`          | `Name name`, `Lambda lambda`
 | `Break`              | `Statement`          |
-| `Return`             | `Statement`          |
-| `Condition`          | `AbstractSyntaxTree` |
-| `FunctionName`       | `AbstractSyntaxTree` |
-| `Parameters`         | `AbstractSyntaxTree` |
-| `Range`              | `AbstractSyntaxTree` |
-| `Field`              | `AbstractSyntaxTree` |
+| `Return`             | `Statement`          | `List<Expression> list`
+| `Condition`          | `AbstractSyntaxTree` | `Expression test`, `List<Statement> block`
+| `FunctionName`       | `AbstractSyntaxTree` | `NameList namelist`, `bool self`
+| `Parameters`         | `AbstractSyntaxTree` | `NameList namelist`, `bool dots`
+| `Range`              | `AbstractSyntaxTree` | `Expression start,end,step`
+| `Field`              | `AbstractSyntaxTree` | `Expression key,value`
 
-The `Expression` and `Statement` classes include `transpile` functions to translate Lua to Lisp.
+The `Expression` and `Statement` classes and derivatives include `transpile` functions to translate Lua to Lisp.
