@@ -11,7 +11,9 @@ All of the Lua 5.3 syntax and semantics are covered by the transpiler, except fo
 
 ## How to transpile Lua to Lisp
 
-1. build an abstract syntax tree.  In this case we build a C++ abstract syntax tree using an [abstract grammar](#lua-abstract-grammar) of C++ classes.
+The `lua2lisp` transpiler converts Lua to Lisp in two phases:
+
+1. parse Lua code to build an abstract syntax tree using an [abstract grammar](#lua-abstract-grammar) of C++ classes.
 2. recursively invoke `transpile` member functions of the abstract syntax tree to generate Lisp.
 
 Execution `lua2lisp` on a Lua source code file produces a Lisp file:
