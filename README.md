@@ -169,7 +169,7 @@ A Lua `do` block is translated to a Lisp `begin` special form:
 
 ### if
 
-A Lua `if` with zero of more `endif` branches is translated to a Lisp `cond` special form:
+A Lua `if` with zero of more `elseif` branches is translated to a Lisp `cond` special form:
 
     if <expr1> then <body1> elseif <expr2> then <body2> ... else <bodyk> end
     =>
