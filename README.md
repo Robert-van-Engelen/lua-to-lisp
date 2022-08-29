@@ -11,7 +11,7 @@ The [Bison LALR grammar for Lua 5.3](#lua-53-grammar-for-bison-32-or-greater) th
 
 All of the Lua 5.3 syntax and semantics are covered by the transpiler, except for gotos and low-level stuff such as metatables and integration with C.  Perhaps I will add support for gotos later.
 
-Syntax error reporting uses fairly sophisticated features of RE/flex combined with Bison's C++ complete+locations parsing documented in the [lua.l](lua.l) and [lua.y](lua.y) source code files.
+Syntax error reporting uses fairly sophisticated features of RE/flex combined with Bison's C++ [complete symbols](https://www.gnu.org/software/bison/manual/html_node/Complete-Symbols.html)+[locations](https://www.gnu.org/software/bison/manual/html_node/Tracking-Locations.html) parsing documented in the [lua.l](lua.l) and [lua.y](lua.y) source code files.
 
 ## How to transpile Lua to Lisp
 
