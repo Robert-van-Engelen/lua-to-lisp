@@ -294,7 +294,7 @@ class Transpiler {
     {
 #ifdef NAME_LOOKUP
       // if unassigned/undefined Lisp variables cause errors: use a Lisp lookup special form
-      fprintf(transpiler.out, "(lookup '" LUA_NAME_FORMAT ")", name->c_str());
+      fprintf(transpiler.out, "(lookup " LUA_NAME_FORMAT ")", name->c_str());
 #else
       fprintf(transpiler.out, LUA_NAME_FORMAT, name->c_str());
 #endif

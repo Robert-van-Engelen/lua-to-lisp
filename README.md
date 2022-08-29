@@ -55,9 +55,11 @@ Lua variables are translated to Lisp with a `lua.` prefix to prevent name clashe
 
 Important: Lisp is assumed to produce `nil` for unassigned variables, like Lua produces `nil` for unassigned variables.  Most Lisp don't do this.  Either the Lisp interpreter should be adjusted or each Lua `<name>` should be looked up (compile the source code with `-DNAME_LOOKUP`):
 
-    <name> => (lookup '<lua.name>)
+    <name> => (lookup <lua.name>)
 
-where the `lookup` special form returns `nil` if `<lua.name>` is unassigned.
+where the `lookup` special form returns `nil` if `<lua.name>` is unassigned:
+
+    (defmacro lookup (var) (list 'ignore-errors var))
 
 ### Tables
 
