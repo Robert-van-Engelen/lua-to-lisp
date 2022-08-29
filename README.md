@@ -1,7 +1,7 @@
 Lua to Lisp transpiler
 ======================
 
-I spent a satisfying weekend writing a Lua-to-Lisp transpiler in [Bison](https://www.gnu.org/software/bison/) and [RE/flex](https://github.com/Genivia/RE-flex).  The transpiler translates Lua language constructs to Lisp.  Dare I say that Lua is essentially sugared Lisp?  A [quote](http://paulgraham.com/rootsoflisp.html) by Paul Graham comes to mind *"As computers have grown more powerful, the new languages being developed have been moving steadily toward the Lisp model."*
+I spent a satisfying weekend writing a Lua-to-Lisp transpiler in [Bison](https://www.gnu.org/software/bison/) and [RE/flex](https://github.com/Genivia/RE-flex) a modern alternative to Flex for C++.  The transpiler translates Lua language constructs to Lisp.  Dare I say that Lua is essentially sugared Lisp?  A [quote](http://paulgraham.com/rootsoflisp.html) by Paul Graham comes to mind *"As computers have grown more powerful, the new languages being developed have been moving steadily toward the Lisp model."*
 
 The first step was to locate the Lua 5.3 grammar, which can be found in the [Lua 5.3 reference manual](https://www.lua.org/manual/5.3/manual.html).  There are also older [Lua grammars](http://lua-users.org/wiki/LuaGrammar) on the web.
 
