@@ -6,9 +6,8 @@
     (lua.pos 1))
   (let ((ret (lambda (yield) (block @func@
     (block @loop@ (while lua.line
-      (let (
-        (lua.s ((index 'find lua.string) () lua.line "%w+" lua.pos))
-        (lua.e))
+      (let ((lua.s) (lua.e))
+      (assign (lua.s lua.e) (((index 'find lua.string) () lua.line "%w+" lua.pos)))
       (cond
         (lua.s
           (assign (lua.pos) ((+ lua.e 1)))
