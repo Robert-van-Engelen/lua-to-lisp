@@ -196,9 +196,7 @@ A Lua `if` with zero of more `elseif` branches is translated to a Lisp `cond` sp
 
 ### while and until
 
-A `while` and `until` loop is translated to a Lisp `while` and `until` loop special form (or macro), respectively.
-
-A `break` may appear anywhere in a loop to terminate the loop.
+A `while` and `until` loop is translated to a Lisp `while` and `until` loop special form (or macro), respectively:
 
     while <expr> do <body> break end
     =>
@@ -208,11 +206,15 @@ A `break` may appear anywhere in a loop to terminate the loop.
     =>
     (block @loop@ (until <expr> <body> (return-from @loop@)))
 
+A `break` may appear anywhere in a loop to terminate the loop.  A `break` is translated to a `return-from @loop@`:
+
+    break
+    =>
+    (return-from @loop@)
+
 ### for counter loop
 
 A `for` counter loop is translated to a Lisp `do` loop special form.
-
-A `break` may appear anywhere in a loop to terminate the loop.
 
     for <name> = <start>,<end>,<step> do <body> break end
     =>
@@ -221,6 +223,8 @@ A `break` may appear anywhere in a loop to terminate the loop.
       (return-from @loop@))))
 
 The `<step>` value is optional and defaults to one.
+
+A `break` may appear anywhere in a loop to terminate the loop.
 
 ### for iterators loop
 
@@ -237,7 +241,7 @@ A `for` iterators loop is translated to a Lisp `let` to define a `yield` closure
 
 The `iterators` are (anonymous) functions that invoke the `yield` closure typically repeatedly with a Lua `return` value(s) until the value is `nil`.  The Lua `return` is a Lisp `yield` call if a `yield` closure is specified and `ret` is not `nil`, otherwise it is a `return-from @func@`.  See [function](#function).
 
-Unlike other loops, `break` in `for` iterator loops is not supported at this time.  To support a `break` in a `for` iterator loop, the Lua `break` should be translated in general to throw an exception to exit the iterator function and terminate the loop.  This adds Lisp code that clutters the logic, so I left it out for now.
+Unlike other loops, `break` in `for` iterator loops is not supported at this time.  To support a `break` in a `for` iterator loop, the Lua `break` should be translated to throw an exception to exit the iterator function and terminate the loop.  This adds Lisp code that clutters the logic, so I left it out for now.
 
 If only one `<name>` is specified with a `for` iterator loop, then the generated code is simpler:
 
