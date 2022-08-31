@@ -176,7 +176,7 @@ The `letrec` is not closed until the end of the block in which the `local functi
 
 ### do
 
-A Lua `do` block is translated to a Lisp `begin` special form:
+A Lua `do` block is translated to a Lisp `begin` (`progn` in Common Lisp) special form:
 
     do <body> end
     =>
@@ -286,7 +286,7 @@ The `assign` special form also accounts for cases when we have fewer `<expr>` th
 
 ### Goto
 
-Goto is not supported at this time.  It is theoretically possible, but it significantly clutters the logic.
+Goto is not supported at this time, "left as an exercise for the reader."  It is theoretically possible, but it significantly clutters the logic.
 
 ## Lua 5.3 grammar for Bison 3.2 or greater
 
