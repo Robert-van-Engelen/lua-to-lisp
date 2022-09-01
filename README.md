@@ -15,7 +15,7 @@ Syntax error reporting uses fairly sophisticated features of RE/flex combined wi
 
 ## How to transpile Lua to Lisp
 
-The `lua2lisp` transpiler converts Lua to Lisp in two phases:
+The `lua2lisp` transpiler converts Lua to Lisp in two phases, a front-end and back-end:
 
 1. parse Lua code to build an abstract syntax tree using an [abstract grammar](#lua-abstract-grammar) of C++ classes.
 2. recursively invoke `transpile` member functions of the abstract syntax tree to generate Lisp.
@@ -211,6 +211,14 @@ A `break` may appear anywhere in a loop to terminate the loop.  A `break` is tra
     break
     =>
     (return-from @loop@)
+
+Some Lisp have no `while`, e.g. Common Lisp.  In that case let's define them as macros that expand into `loop-while-do` and `loop-until-do`:
+
+    (defmacro while (x . body)
+        (list 'loop 'while x 'do (cons 'progn body)))
+
+    (defmacro until (x . body)
+        (list 'loop 'until x 'do (cons 'progn body)))
 
 ### for counter loop
 

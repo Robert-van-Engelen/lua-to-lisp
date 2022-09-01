@@ -45,3 +45,15 @@
 ; lookup variable, return nil when undefined (suggested), lua.hpp enable macro NAME_LOOKUP
 (defmacro lookup (var)
     (list 'ignore-errors var))
+
+; begin (suggested if begin is not a primitive, but progn is)
+(defmacro begin body)
+    (cons 'progn body))
+
+; while (suggested if while is not a primitive, but loop and progn are)
+(defmacro while (x . body)
+    (list 'loop 'while x 'do (cons 'progn body)))
+
+; until (suggested if while is not a primitive, but loop and progn are)
+(defmacro until (x . body)
+    (list 'loop 'until x 'do (cons 'progn body)))
