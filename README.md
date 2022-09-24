@@ -11,14 +11,14 @@ The [Bison LALR grammar for Lua 5.3](#lua-53-grammar-for-bison-32-or-greater) th
 
 All of the Lua 5.3 syntax and semantics are covered by the transpiler, except for gotos and low-level stuff such as metatables and integration with C.  Perhaps I will add support for gotos later.
 
-Syntax error reporting uses fairly sophisticated features of RE/flex combined with Bison's C++ [complete symbols](https://www.gnu.org/software/bison/manual/html_node/Complete-Symbols.html)+[locations](https://www.gnu.org/software/bison/manual/html_node/Tracking-Locations.html) parsing documented in the [lua.l](lua.l) and [lua.y](lua.y) source code files.
+Syntax error reporting uses fairly sophisticated features of RE/flex combined with Bison's C++ [complete symbols](https://www.gnu.org/software/bison/manual/html_node/Complete-Symbols.html)+[locations](https://www.gnu.org/software/bison/manual/html_node/Tracking-Locations.html) parsing documented in my [lua.l](lua.l) and [lua.y](lua.y) source code files.
 
 ## How to transpile Lua to Lisp
 
-The `lua2lisp` transpiler converts Lua to Lisp in two phases, a front-end and back-end:
+The `lua2lisp` transpiler converts Lua to Lisp in two phases, a front-end phase and a back-end phase:
 
-1. parse Lua code to build an abstract syntax tree using an [abstract grammar](#lua-abstract-grammar) of C++ classes.
-2. recursively invoke `transpile` member functions of the abstract syntax tree to generate Lisp.
+1. parse Lua code to build an abstract syntax tree using an [abstract grammar](#lua-abstract-grammar) of C++ classes I've written for this project
+2. recursively invoke `transpile` member functions of the abstract syntax tree to generate Lisp
 
 Execution `lua2lisp` on a Lua source code file produces a Lisp file:
 
@@ -44,7 +44,7 @@ Lua constants are translated to Lisp constants:
 
 All values are truthy except `nil` and `false` that are falsy in Lua and in Lisp.
 
-Lua strings are translated to Lisp UTF-8 encoded strings by applying the appropriate Lua escapes.
+Lua strings are translated to Lisp UTF-8 encoded strings by expanding the appropriate Lua escapes.
 
 ### Variables
 
@@ -53,7 +53,7 @@ Lua variables are translated to Lisp with a `lua.` prefix to prevent name clashe
     <name> => <lua.name>
     ... => ...
 
-Important: Lisp is assumed to produce `nil` for unassigned variables, like Lua produces `nil` for unassigned variables.  Most Lisp don't do this.  Either the Lisp interpreter should be adjusted or each Lua `<name>` should be looked up (compile the source code with `-DNAME_LOOKUP`):
+Important: Lisp is assumed to produce `nil` for unassigned variables, like Lua produces `nil` for unassigned variables.  Most Lisp don't do this.  Either the Lisp interpreter should be adjusted or each Lua `<name>` should be looked up (compile the transpiler source with `-DNAME_LOOKUP`):
 
     <name> => (lookup <lua.name>)
 
